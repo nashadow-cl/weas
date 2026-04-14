@@ -55,7 +55,7 @@
 
 <div class="container">
 
-<!-- ESTEQUIOMETRÍA -->
+<!-- NYLON -->
 <div class="card">
   <h2>⚗️ Nylon</h2>
 
@@ -63,16 +63,16 @@
   <input id="acido_g" type="number"><br>
 
   <label>Masa molar ácido (g/mol)</label><br>
-  <input id="acido_mm" type="number" value="146"><br>
+  <input id="acido_mm" type="number" value="0"><br>
 
   <label>Masa amina (g)</label><br>
   <input id="amina_g" type="number"><br>
 
   <label>Masa molar amina (g/mol)</label><br>
-  <input id="amina_mm" type="number" value="116"><br>
+  <input id="amina_mm" type="number" value="0"><br>
 
   <label>Masa molar nylon (g/mol)</label><br>
-  <input id="nylon_mm" type="number" value="226"><br>
+  <input id="nylon_mm" type="number" value="0"><br>
 
   <button onclick="calcularNylon()">Calcular</button>
 
@@ -89,6 +89,13 @@
   <button onclick="calcularPH()">Calcular pH</button>
 
   <p id="resultado_ph"></p>
+
+  <!-- 🔥 FORMULAS AGREGADAS -->
+  <div style="margin-top: 25px; font-size: 20px;">
+    <p>\( pH = -\log[H^+] \)</p>
+    <p>\( [OH^-] = \frac{10^{-14}}{[H^+]} \)</p>
+  </div>
+
 </div>
 
 </div>
@@ -111,17 +118,11 @@ function calcularNylon() {
     return;
   }
 
-  // moles = masa / masa molar
   let moles_acido = acido_g / acido_mm;
   let moles_amina = amina_g / amina_mm;
 
-  // reactivo limitante
   let limitante = Math.min(moles_acido, moles_amina);
-
-  // nylon producido (1:1)
   let moles_nylon = limitante;
-
-  // gramos de nylon
   let gramos_nylon = moles_nylon * nylon_mm;
 
   document.getElementById("resultado_nylon").innerText =
@@ -143,10 +144,7 @@ function calcularPH() {
     return;
   }
 
-  // pH = -log[H+]
   let pH = -Math.log10(H);
-
-  // [OH-] = 1e-14 / [H+]
   let OH = 1e-14 / H;
 
   document.getElementById("resultado_ph").innerText =
@@ -155,6 +153,9 @@ function calcularPH() {
 }
 
 </script>
+
+<!-- 🔥 ESTO HACE QUE LAS FORMULAS SE VEAN BONITAS -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 </body>
 </html>
