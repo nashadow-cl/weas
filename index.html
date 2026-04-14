@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Simulador de Nylon y Ácido-Base</title>
+
+<style>
+  body {
+    font-family: Arial;
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    color: white;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+  }
+
+  input {
+    width: 80%;
+    padding: 8px;
+    margin: 8px;
+  }
+
+  button {
+    background: #2a5298;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #1e3c72;
+  }
+</style>
+
+</head>
+<body>
+
+<h1>🧪 Simulador de Nylon + Ácido-Base</h1>
+
+<div class="container">
+
+<!-- ESTEQUIOMETRÍA -->
+<div class="card">
+  <h2>⚗️ Nylon</h2>
+
+  <label>Masa ácido (g)</label><br>
+  <input id="acido_g" type="number"><br>
+
+  <label>Masa molar ácido (g/mol)</label><br>
+  <input id="acido_mm" type="number" value="146"><br>
+
+  <label>Masa amina (g)</label><br>
+  <input id="amina_g" type="number"><br>
+
+  <label>Masa molar amina (g/mol)</label><br>
+  <input id="amina_mm" type="number" value="116"><br>
+
+  <label>Masa molar nylon (g/mol)</label><br>
+  <input id="nylon_mm" type="number" value="226"><br>
+
+  <button onclick="calcularNylon()">Calcular</button>
+
+  <p id="resultado_nylon"></p>
+</div>
+
+<!-- ÁCIDO-BASE -->
+<div class="card">
+  <h2>🧪 Ácido-Base</h2>
+
+  <label>[H+] (mol/L)</label><br>
+  <input id="h_conc" type="number"><br>
+
+  <button onclick="calcularPH()">Calcular pH</button>
+
+  <p id="resultado_ph"></p>
+</div>
+
+</div>
+
+<script>
+
+// 🧪 NYLON
+function calcularNylon() {
+
+  let acido_g = parseFloat(document.getElementById("acido_g").value);
+  let acido_mm = parseFloat(document.getElementById("acido_mm").value);
+
+  let amina_g = parseFloat(document.getElementById("amina_g").value);
+  let amina_mm = parseFloat(document.getElementById("amina_mm").value);
+
+  let nylon_mm = parseFloat(document.getElementById("nylon_mm").value);
+
+  if (isNaN(acido_g) || isNaN(amina_g)) {
+    document.getElementById("resultado_nylon").innerText = "⚠️ Ingresa datos válidos";
+    return;
+  }
+
+  // moles = masa / masa molar
+  let moles_acido = acido_g / acido_mm;
+  let moles_amina = amina_g / amina_mm;
+
+  // reactivo limitante
+  let limitante = Math.min(moles_acido, moles_amina);
+
+  // nylon producido (1:1)
+  let moles_nylon = limitante;
+
+  // gramos de nylon
+  let gramos_nylon = moles_nylon * nylon_mm;
+
+  document.getElementById("resultado_nylon").innerText =
+    "Moles ácido: " + moles_acido.toFixed(2) +
+    "\nMoles amina: " + moles_amina.toFixed(2) +
+    "\nReactivo limitante: " + (moles_acido < moles_amina ? "Ácido" : "Amina") +
+    "\nNylon (mol): " + moles_nylon.toFixed(2) +
+    "\nNylon (g): " + gramos_nylon.toFixed(2);
+}
+
+
+// 🧪 ÁCIDO-BASE
+function calcularPH() {
+
+  let H = parseFloat(document.getElementById("h_conc").value);
+
+  if (isNaN(H) || H <= 0) {
+    document.getElementById("resultado_ph").innerText = "⚠️ Ingresa un valor válido";
+    return;
+  }
+
+  // pH = -log[H+]
+  let pH = -Math.log10(H);
+
+  // [OH-] = 1e-14 / [H+]
+  let OH = 1e-14 / H;
+
+  document.getElementById("resultado_ph").innerText =
+    "pH: " + pH.toFixed(2) +
+    "\n[OH-]: " + OH.toExponential(2) + " mol/L";
+}
+
+</script>
+
+</body>
+</html>
